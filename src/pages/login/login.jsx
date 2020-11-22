@@ -1,18 +1,45 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from 'antd';
+import { Redirect } from "react-router-dom";
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import './login.less';
 import logo from './images/logo.png'
+import { reqLogin } from "../../api";
+import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
+
 
 // 登陆的路由组件
 export default class Login extends Component {
-    onFinish = (values) => {
-        console.log("提交表单且数据验证成功"+values);
-    }
+    onFinish = (async (values) => {
+        // console.log("提交表单且数据验证成功"+values);
+        const { username, password } = values
+
+        const result = await reqLogin(username, password)
+        // console.log('请求发送成功', response.data)
+        // const result = response.data
+        if (result.status === 0) {
+            const user = result.data
+            memoryUtils.user = user
+            storageUtils.saveUser(user)
+
+            message.success('登录成功')
+
+            this.props.history.replace('/')
+        } else {
+            message.error(result.msg)
+        }
+
+        // reqLogin(username, password).then(response => {
+        //     console.log('请求发送成功',response.data)
+        // }).catch(error =>{
+        //     console.log('请求发送失败')
+        // })
+    });
 
     onFinishFailed = (errorFields) => {
-        console.log("提交表单且数据验证失败"+errorFields)
+        console.log("提交表单且数据验证失败" + errorFields)
     }
 
     // 对密码进行验证
@@ -32,6 +59,11 @@ export default class Login extends Component {
     }
 
     render() {
+        const user = memoryUtils.user
+        if (user && user._id) {
+            // 自动跳转登录界面
+            return <Redirect to='/' />
+        }
         return (
             <div className="login">
                 <header className="login-header">
@@ -41,7 +73,7 @@ export default class Login extends Component {
                 <section className="login-content">
                     <h2>用户登录</h2>
                     <Form onFinish={this.onFinish} onFinishFailed={this.onFinishFailed} className="login-form">
-                        <Form.Item name="username"
+                        <Form.Item name="username" initialValue='admin'
                             //声明式验证：直接使用别人定义好的验证规则
                             rules={[
                                 {
