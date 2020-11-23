@@ -15,3 +15,9 @@ form.creat方法在antd V4已经弃用。无需进行此操作。
 ### 16节=>表单自定义验证
   
 validator自定义校验需要返回一个promise。
+
+### 32节=>动态显示菜单列表
+
+Icon已在antdv4中弃用，两种解决方式：  
+1.import { Icon } from '@ant-design/compatible';兼容旧版本。  
+2.修改图标名为新版，用React.createElement来返回图标。

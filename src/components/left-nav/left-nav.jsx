@@ -1,17 +1,30 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { Menu } from 'antd';
-import {
-    AppstoreOutlined,
-    PieChartOutlined,
-} from '@ant-design/icons';
 
-import logo from "../../assets/images/logo.png"
-import './left-nav.less'
+import logo from "../../assets/images/logo.png";
+import menuList from "../../config/menuConfig";
+import getIconutil from "../../utils/iconUtils";
+import './left-nav.less';
 
 const { SubMenu } = Menu;
 
 export default class LeftNav extends Component {
+    //根据menu的数据数组生成对应的标签数组
+    getMenuNodes = (menuList) => {
+        return menuList.map(item => {
+            if(!item.children){
+                const icon = getIconutil.getIcon(item.icon)
+                return (
+                    <Menu.Item key={item.key} icon={icon}>
+                        <Link to={item.key}>
+                            <span>{item.title}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            }
+        })
+    }
 
     render() {
         return (
@@ -27,6 +40,7 @@ export default class LeftNav extends Component {
                     mode="inline"
                     theme="dark"
                 >
+                    {/*
                     <Menu.Item key="/home" icon={<PieChartOutlined />}>
                         <Link to='/home'>
                             <span>首页</span>
@@ -57,6 +71,11 @@ export default class LeftNav extends Component {
                             <span>角色管理</span>
                         </Link>
                     </Menu.Item>
+                    */}
+
+                    {
+                        this.getMenuNodes(menuList)
+                    }
                 </Menu>
             </div>
 
