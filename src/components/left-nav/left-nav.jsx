@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 
 import logo from "../../assets/images/logo.png";
 import menuList from "../../config/menuConfig";
-import getIconutil from "../../utils/iconUtils";
+import getIconutil from "../../utils/getIconUtils";
 import './left-nav.less';
 
 const { SubMenu } = Menu;
@@ -13,14 +13,32 @@ export default class LeftNav extends Component {
     //根据menu的数据数组生成对应的标签数组
     getMenuNodes = (menuList) => {
         return menuList.map(item => {
-            if(!item.children){
-                const icon = getIconutil.getIcon(item.icon)
+            const icon = getIconutil.getIcon(item.icon)
+            if (!item.children) {
                 return (
                     <Menu.Item key={item.key} icon={icon}>
                         <Link to={item.key}>
                             <span>{item.title}</span>
                         </Link>
                     </Menu.Item>
+                )
+            } else {
+                return (
+                    <SubMenu key={item.key} icon={icon} title={item.title}>
+                        {this.getMenuNodes(item.children)}
+                        {/* 
+                        <Menu.Item key={item.key} icon={icon}>
+                        <Link to={item.key}>
+                            <span>{item.title}</span>
+                        </Link>
+                        </Menu.Item>
+                        <Menu.Item key={item.key} icon={icon}>
+                        <Link to={item.key}>
+                            <span>{item.title}</span>
+                        </Link>
+                        </Menu.Item> 
+                        */}
+                    </SubMenu>
                 )
             }
         })
