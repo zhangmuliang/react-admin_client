@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 import { Menu } from 'antd';
 
 import logo from "../../assets/images/logo.png";
@@ -9,9 +9,11 @@ import './left-nav.less';
 
 const { SubMenu } = Menu;
 
-export default class LeftNav extends Component {
+class LeftNav extends Component {
     //根据menu的数据数组生成对应的标签数组
     getMenuNodes = (menuList) => {
+        const path = this.props.location.pathname;
+        //map方式，还有一种reduce方式
         return menuList.map(item => {
             const icon = getIconutil.getIcon(item.icon)
             if (!item.children) {
@@ -23,28 +25,27 @@ export default class LeftNav extends Component {
                     </Menu.Item>
                 )
             } else {
+                const cItem = item.children.find(cItem => cItem.key === path)
+                if(cItem) {
+                    this.openKey = item.key
+                }
                 return (
                     <SubMenu key={item.key} icon={icon} title={item.title}>
+                        {/* 递归调用 */}
                         {this.getMenuNodes(item.children)}
-                        {/* 
-                        <Menu.Item key={item.key} icon={icon}>
-                        <Link to={item.key}>
-                            <span>{item.title}</span>
-                        </Link>
-                        </Menu.Item>
-                        <Menu.Item key={item.key} icon={icon}>
-                        <Link to={item.key}>
-                            <span>{item.title}</span>
-                        </Link>
-                        </Menu.Item> 
-                        */}
                     </SubMenu>
                 )
             }
         })
     }
 
+    componentWillMount(){
+        this.menuNodes = this.getMenuNodes(menuList)
+    }
+
     render() {
+        const path = this.props.location.pathname;
+        const openkey = this.openKey
         return (
             <div className="left-nav">
                 <Link to='/home' className="left-nav-header">
@@ -53,8 +54,8 @@ export default class LeftNav extends Component {
                 </Link>
 
                 <Menu
-                    defaultSelectedKeys={['/home']}
-                    defaultOpenKeys={['sub1']}
+                    selectedKeys={[path]}
+                    defaultOpenKeys={[openkey]}
                     mode="inline"
                     theme="dark"
                 >
@@ -92,7 +93,7 @@ export default class LeftNav extends Component {
                     */}
 
                     {
-                        this.getMenuNodes(menuList)
+                        this.menuNodes
                     }
                 </Menu>
             </div>
@@ -100,3 +101,5 @@ export default class LeftNav extends Component {
         )
     }
 }
+
+export default withRouter(LeftNav)

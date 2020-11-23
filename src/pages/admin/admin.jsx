@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 
 import memoryUtils from "../../utils/memoryUtils";
 import LeftNav from "../../components/left-nav/left-nav";
-import HeaderNav from "../../components/header/header-nav";
+import HeaderNav from "../../components/header-nav/header-nav";
 import Home from "../home/home";
 import Category from "../category/category";
 import Product from "../product/product";
@@ -26,13 +26,13 @@ export default class Admin extends Component {
             return <Redirect to='/Login' />
         }
         return (
-            <Layout style={{ height: "100%" }}>
+            <Layout style={{ height: "100%"}}>
                 <Sider>
                     <LeftNav />
                 </Sider>
                 <Layout>
                     <HeaderNav />
-                    <Content>
+                    <Content style={{margin: 20, backgroundColor: "#fff"}}>
                         <Switch>
                             <Route path='/home' component={Home} />
                             <Route path='/category' component={Category} />
@@ -45,7 +45,7 @@ export default class Admin extends Component {
                             <Redirect to='/home' />
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: "center", borderTop:"1px solid gray", color: "#ccc" }}>推荐使用火狐浏览器，可以获得最佳页面体验效果</Footer>
+                    <Footer style={{ textAlign: "center", borderTop:"1px solid gray", color: "#777" }}>推荐使用火狐浏览器，可以获得最佳页面体验效果</Footer>
                 </Layout>
             </Layout>
         )

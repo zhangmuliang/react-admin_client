@@ -20,5 +20,5 @@ validator自定义校验需要返回一个promise。
 
 Icon已在antdv4中弃用，三种解决方式：  
 1.import { Icon } from '@ant-design/compatible';兼容旧版本。  
-2.修改图标名为新版，用React.createElement来返回图标。
+2.修改图标名为新版，用React.createElement来返回图标。  
 3.可以在配置文件中直接引入对应的新版标签，直接传出。
