@@ -32,3 +32,12 @@ export const reqWeather = (key,city) => {
     })
 }
 // reqWeather('ab25b0e7bc3870e97bd2a4a2911d580f','110000')
+
+//获取分类列表
+export const reqCategories = (parentId) => ajax('/manage/category/list', {parentId}, 'GET')
+
+//添加分类
+export const reqAddCategories = (parentId,categoryName) => ajax('/manage/category/add', {parentId,categoryName}, 'POST')
+
+//更新分类
+export const reqUpdateCategories = (categoryId,categoryName) => ajax('/manage/category/update', {categoryId,categoryName}, 'POST')

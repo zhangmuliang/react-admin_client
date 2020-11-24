@@ -22,3 +22,17 @@ Icon已在antdv4中弃用，三种解决方式：
 1.import { Icon } from '@ant-design/compatible';兼容旧版本。  
 2.修改图标名为新版，用React.createElement来返回图标。  
 3.可以在配置文件中直接引入对应的新版标签，直接传出。
+
+### 38节=>jsonp请求获取天气
+  
+用高德天气查询来代替教程中的百度天气API
+
+### 49节=>异步显示二级分类列表
+  
+在axios过程中封装ajax，参数params写成param，导致出现无法正确获取接口数据bug。
+
+### 53节=>更新分类  
+
+由于antdV4中不含有creat方法，且在类组件中应该使用formRef = React.createRef()来传递表单数据。  
+在函数组件中则应使用useForm。  
+
