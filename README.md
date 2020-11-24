@@ -36,3 +36,9 @@ Icon已在antdv4中弃用，三种解决方式：
 由于antdV4中不含有creat方法，且在类组件中应该使用formRef = React.createRef()来传递表单数据。  
 在函数组件中则应使用useForm。  
 
+### 55节=>添加分类
+  
+与上一个部分相同，应该使用ref来收集表单数据。  
+另一方面注意分类名的初始值由Form.Item的initialValue来控制。  
+同样需要注意其后续值的改变由Form的setFieldsValue来实现控制。  
+

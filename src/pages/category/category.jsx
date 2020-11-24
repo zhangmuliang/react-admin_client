@@ -91,11 +91,19 @@ export default class Category extends Component {
         })
     }
     //添加分类
-    addCategory = (category) => {
-        console.log('add')
+    addCategory = async () => {
         this.setState({
             showStatus: 0
         })
+
+        const {parentId,categoryName} = this.AddFormRef.formRef.current.getFieldsValue()
+        // console.log(this.AddFormRef.formRef.current.getFieldsValue())
+        const result = await reqAddCategories(parentId,categoryName)
+        if(result.status===0){
+            this.getCategories()
+        }else{
+            message.error(result.msg)
+        }
     }
 
     //更新分类
@@ -104,7 +112,7 @@ export default class Category extends Component {
             showStatus: 0
         })
         const categoryId = this.category._id
-        const {categoryName} = this.formRef.formRef.current.getFieldsValue()
+        const {categoryName} = this.UpdateFormRef.formRef.current.getFieldsValue()
         const result = await reqUpdateCategories(categoryId,categoryName)
         if(result.status===0){
             this.getCategories()
@@ -146,7 +154,11 @@ export default class Category extends Component {
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}
                 >
-                    <AddForm />
+                    <AddForm 
+                    categories={categories} 
+                    parentId={parentId}
+                    ref={(formRef) => {this.AddFormRef = formRef}}
+                    />
                 </Modal>
                 <Modal
                     title="更新分类"
@@ -156,7 +168,7 @@ export default class Category extends Component {
                 >
                     <UpdateForm 
                     categoryName={category.name} 
-                    ref={(formRef) => {this.formRef = formRef}}
+                    ref={(formRef) => {this.UpdateFormRef = formRef}}
                     />
                 </Modal>
                 <Table
