@@ -44,7 +44,6 @@ export default class Login extends Component {
 
     // 对密码进行验证
     validatePwd = (rule, value) => {
-        console.log(rule, value);
         if (!value) {
             return Promise.reject('请输入密码！');
         } else if (value.length < 4) {
