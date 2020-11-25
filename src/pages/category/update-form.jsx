@@ -20,7 +20,16 @@ export default class UpdateForm extends Component {
         const {categoryName} = this.props
         return (
             <Form ref={this.formRef}>
-                <Item name='categoryName' initialValue={categoryName} >
+                <Item 
+                name='categoryName' 
+                initialValue={categoryName}
+                rules={[
+                    {
+                        required:true,
+                        message:"分类名不能为空。",
+                    },
+                ]}
+                >
                     <Input placeholder='请输入分类名称' />
                 </Item>
             </Form>

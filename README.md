@@ -40,5 +40,9 @@ Icon已在antdv4中弃用，三种解决方式：
   
 与上一个部分相同，应该使用ref来收集表单数据。  
 另一方面注意分类名的初始值由Form.Item的initialValue来控制。  
-同样需要注意其后续值的改变由Form的setFieldsValue来实现控制。  
+同样需要注意其后续值的改变由FormInstance的setFieldsValue来实现控制。  
+
+### 57节=>表单验证
+
+FormInstance的validateFields是由promise实现而非callback调用。  
 

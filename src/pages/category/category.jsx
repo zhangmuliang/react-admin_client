@@ -7,6 +7,7 @@ import { reqAddCategories, reqCategories, reqUpdateCategories } from "../../api"
 import AddForm from "./add-form";
 import UpdateForm from "./update-form";
 
+
 export default class Category extends Component {
     state = {
         loading: false,
@@ -91,38 +92,53 @@ export default class Category extends Component {
         })
     }
     //添加分类
-    addCategory = async () => {
-        this.setState({
-            showStatus: 0
-        })
-
-        const {parentId,categoryName} = this.AddFormRef.formRef.current.getFieldsValue()
-        // console.log(this.AddFormRef.formRef.current.getFieldsValue())
-        const result = await reqAddCategories(parentId,categoryName)
-        if(result.status===0){
-            this.getCategories()
-        }else{
-            message.error(result.msg)
-        }
+    addCategory = () => {
+        this.AddFormRef.formRef.current.validateFields()
+            .then(async values => {
+                this.setState({
+                    showStatus: 0
+                })
+                const { parentId, categoryName } = values
+                // console.log(this.AddFormRef.formRef.current.getFieldsValue())
+                const result = await reqAddCategories(parentId, categoryName)
+                if (result.status === 0) {
+                    if (parentId === this.state.parentId) {
+                        this.getCategories()
+                    }
+                } else {
+                    message.error(result.msg)
+                }
+            })
+            .catch(info => {
+                console.log('验证失败:', info);
+            })
     }
 
+
     //更新分类
-    updateCategory = async ()=>{
-        this.setState({
-            showStatus: 0
-        })
-        const categoryId = this.category._id
-        const {categoryName} = this.UpdateFormRef.formRef.current.getFieldsValue()
-        const result = await reqUpdateCategories(categoryId,categoryName)
-        if(result.status===0){
-            this.getCategories()
-        }else{
-            message.error(result.msg)
-        }
+    // updateCategory = async ()=>{
+    updateCategory = () => {
+        this.UpdateFormRef.formRef.current.validateFields()
+            .then(async values => {
+                this.setState({
+                    showStatus: 0
+                })
+                const categoryId = this.category._id
+                const { categoryName } = values
+                const result = await reqUpdateCategories(categoryId, categoryName)
+                if (result.status === 0) {
+                    this.getCategories()
+                } else {
+                    message.error(result.msg)
+                }
+            })
+            .catch(info => {
+                console.log('验证失败:', info);
+            });
     }
 
     componentWillMount() {
-        this.initColums();
+        this.initColums()
     }
 
     componentDidMount() {
@@ -130,8 +146,8 @@ export default class Category extends Component {
     }
 
     render() {
-        const { categories, loading, subCategories, parentId, parentName,showStatus } = this.state
-        const category = this.category || {name:""}
+        const { categories, loading, subCategories, parentId, parentName, showStatus } = this.state
+        const category = this.category || { name: "" }
         const title = parentId === '0' ? '一级分类列表' : (
             <span>
                 <LinkButton onClick={() => { this.showCategories() }}>一级分类列表</LinkButton>
@@ -150,25 +166,25 @@ export default class Category extends Component {
             <Card title={title} extra={extra}>
                 <Modal
                     title="添加分类"
-                    visible={showStatus===1}
+                    visible={showStatus === 1}
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}
                 >
-                    <AddForm 
-                    categories={categories} 
-                    parentId={parentId}
-                    ref={(formRef) => {this.AddFormRef = formRef}}
+                    <AddForm
+                        categories={categories}
+                        parentId={parentId}
+                        ref={(formRef) => { this.AddFormRef = formRef }}
                     />
                 </Modal>
                 <Modal
                     title="更新分类"
-                    visible={showStatus===2}
+                    visible={showStatus === 2}
                     onOk={this.updateCategory}
                     onCancel={this.handleCancel}
                 >
-                    <UpdateForm 
-                    categoryName={category.name} 
-                    ref={(formRef) => {this.UpdateFormRef = formRef}}
+                    <UpdateForm
+                        categoryName={category.name}
+                        ref={(formRef) => { this.UpdateFormRef = formRef }}
                     />
                 </Modal>
                 <Table

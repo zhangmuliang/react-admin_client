@@ -20,19 +20,30 @@ export default class AddForm extends Component {
     }
 
     render() {
-        const {categories, parentId} = this.props
+        const { categories, parentId } = this.props
         return (
             <Form ref={this.formRef}>
-                <Item name="parentId" initialValue={parentId}>
+                <Item
+                    name="parentId"
+                    initialValue={parentId}
+                >
                     <Select>
                         <Option value='0'>一级分类</Option>
                         {
-                            categories.map((c,index) => <Option key={index} value={c._id}>{c.name}</Option>)
+                            categories.map((c, index) => <Option key={index} value={c._id}>{c.name}</Option>)
                         }
                     </Select>
                 </Item>
 
-                <Item name='categoryName'> 
+                <Item
+                    name='categoryName'
+                    rules={[
+                        {
+                            required: true,
+                            message: "分类名不能为空。",
+                        },
+                    ]}
+                >
                     <Input placeholder='请输入分类名称' />
                 </Item>
 
