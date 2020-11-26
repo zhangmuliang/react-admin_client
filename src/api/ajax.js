@@ -8,7 +8,6 @@ import axios from 'axios';
 
 
 export default function ajax(url, data={}, type='GET'){
-    // console.log(url,data,type)
     return new Promise((resolve,reject) => {
         let promise;
         // 执行ajax请求

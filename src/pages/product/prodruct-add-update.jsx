@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Card, Form, Input, Cascader, Button, Upload } from 'antd';
+import { Card, Form, Input, Cascader, Button, message } from 'antd';
 import LinkButton from "../../components/link-button/link-button";
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { reqCategories } from "../../api";
+import { reqCategories, reqAddOrUpdateProduct } from "../../api";
 import PicturesWall from "./product-pictures-wall";
+import RichText from "./product-rich-text";
 
 const { Item } = Form
 const { TextArea } = Input
@@ -13,9 +14,10 @@ export default class ProductAddUpdate extends Component {
     state = {
         optionLists: [],
     }
-    constructor (props) {
+    constructor(props) {
         super(props)
         this.pw = React.createRef()
+        this.edit = React.createRef()
     }
 
     initOptions = async (categories) => {
@@ -28,15 +30,18 @@ export default class ProductAddUpdate extends Component {
         ))
 
         const { isUpdate, product } = this
-        const { pCategoryId, categoryId } = product
+        const { pCategoryId } = product
+
         if (isUpdate && pCategoryId !== "0") {
             const subCategories = await this.getCategories(pCategoryId)
+
             const childOptionLists = subCategories.map(c => ({
                 value: c._id,
                 label: c.name,
                 isLeaf: true,
             }))
             const targetOption = optionLists.find(option => option.value === pCategoryId)
+            console.log(targetOption)
             targetOption.children = childOptionLists
         }
 
@@ -61,11 +66,32 @@ export default class ProductAddUpdate extends Component {
     formRef = React.createRef();
     submit = () => {
         this.formRef.current.validateFields()
-            .then(values => {
-                console.log(values)
-                console.log(this.pw.current.getImgs())
+            .then(async values => {
+                const { name, desc, price, categoryIds } = values
+                let pCategoryId, categoryId
+                if (categoryIds.length === 1) {
+                    pCategoryId = '0'
+                    categoryId = categoryIds[0]
+                } else {
+                    pCategoryId = categoryIds[0]
+                    categoryId = categoryIds[1]
+                }
+                const imgs = this.pw.current.getImgs()
+                const detail = this.edit.current.getDetail()
+                const product = { name, desc, price, imgs, detail, pCategoryId, categoryId }
+                if (this.isUpdate) {
+                    product._id = this.product._id
+                }
+                const result = await reqAddOrUpdateProduct(product)
+                console.log(result,product)
+                if (result.status === 0) {
+                    message.success(`${this.isUpdate ? '更新' : '添加'}商品成功`)
+                    this.props.history.goBack()
+                } else {
+                    message.error(`${this.isUpdate ? '更新' : '添加'}商品失败`)
+                }
             }).catch(errinfo => {
-                alert('提交失败')
+                alert('提交失败'+errinfo)
             })
     }
 
@@ -96,7 +122,7 @@ export default class ProductAddUpdate extends Component {
         }
 
         // load options lazily
-
+        
         this.setState({
             optionLists: [...this.state.optionLists]
         });
@@ -114,7 +140,7 @@ export default class ProductAddUpdate extends Component {
 
     render() {
         const { isUpdate, product } = this
-        const { pCategoryId, categoryId,imgs } = product
+        const { pCategoryId, categoryId, imgs, detail } = product
         const categoryIds = []
         if (isUpdate) {
             if (pCategoryId === '0') {
@@ -182,7 +208,7 @@ export default class ProductAddUpdate extends Component {
                         ]}>
                         <Input type='number' placeholder='请输入商品价格' addonAfter="元" />
                     </Item>
-                    <Item label='商品分类：' name='categoryIds'>
+                    <Item label='商品分类：' name='categoryIds' initialValue={categoryIds}>
                         <Cascader
                             placeholder='请选择商品分类'
                             options={this.state.optionLists}
@@ -190,10 +216,10 @@ export default class ProductAddUpdate extends Component {
                         />
                     </Item>
                     <Item label='商品图片：'>
-                        <PicturesWall ref={this.pw} imgs={imgs}/>
+                        <PicturesWall ref={this.pw} imgs={imgs} />
                     </Item>
-                    <Item label='商品详情：'>
-                        <Input placeholder='请输入商品名称' />
+                    <Item label='商品详情：' labelCol={{ span: 2 }} wrapperCol={{ span: 18 }}>
+                        <RichText ref={this.edit} detail={detail} />
                     </Item>
                     <Item>
                         <Button type="primary" onClick={this.submit}>提交</Button>

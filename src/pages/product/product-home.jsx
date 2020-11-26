@@ -76,7 +76,7 @@ export default class ProductHome extends Component {
         const { searchName, searchType } = this.state
         let result;
         if (searchName) {
-            result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
+            result = await reqSearchProducts(pageNum, PAGE_SIZE, searchName, searchType)
         } else {
             result = await reqProducts(pageNum, PAGE_SIZE)
         }

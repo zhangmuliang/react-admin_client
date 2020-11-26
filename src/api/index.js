@@ -49,10 +49,7 @@ export const reqCategoriyName = (categoryId) => ajax('/manage/category/info', {c
 export const reqProducts = (pageNum,pageSize) => ajax('/manage/product/list', {pageNum,pageSize}, 'GET')
 
 //搜索商品分页列表
-export const reqSearchProducts = ({pageNum,pageSize,searchName, searchType}) => ajax('/manage/product/search',{
-    pageNum,
-    pageSize,
-    [searchType]: searchName,
+export const reqSearchProducts = (pageNum,pageSize,searchName, searchType) => ajax('/manage/product/search',{pageNum,pageSize,[searchType]: searchName,
 },'GET')
 
 //更新商品状态（上架下架）
@@ -60,3 +57,6 @@ export const reqUpdateStatus =  (productId,status) => ajax('/manage/product/upda
 
 //删除图片
 export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')
+
+// 添加/修改商品
+export const reqAddOrUpdateProduct = (product) => ajax('/manage/product/' + ( product._id?'update':'add'), product, 'POST')
