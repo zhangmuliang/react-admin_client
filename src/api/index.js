@@ -57,3 +57,6 @@ export const reqSearchProducts = ({pageNum,pageSize,searchName, searchType}) => 
 
 //更新商品状态（上架下架）
 export const reqUpdateStatus =  (productId,status) => ajax('/manage/product/updateStatus',{productId,status},'POST')
+
+//删除图片
+export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')
