@@ -16,9 +16,9 @@ export default class ProductDetail extends Component {
 
     async componentDidMount() {
         let cName1;
-        const { pCategoryId, CategoryId } = this.props.location.state
+        const { pCategoryId, categoryId } = this.props.location.state
         if (pCategoryId === '0') {
-            const result = await reqCategoriyName(CategoryId)
+            const result = await reqCategoriyName(categoryId)
             if (result.status === 0 && result.data) {
                 cName1 = result.data.name
                 this.setState({ cName1 })
@@ -31,7 +31,8 @@ export default class ProductDetail extends Component {
             //     const cName2 = result2.data.name
             //     this.setState({ cName1, cName2 })
             // }
-            const results =await Promise.all([reqCategoriyName(pCategoryId),reqCategoriyName(CategoryId)])
+            const results =await Promise.all([reqCategoriyName(pCategoryId),reqCategoriyName(categoryId)])
+            console.log(results)
             if(results[0].status===0 && results[1].status===0 && results[0].data && results[1].data){
                 cName1 = results[0].data.name
                 const cName2 = results[1].data.name

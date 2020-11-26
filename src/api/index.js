@@ -60,3 +60,12 @@ export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')
 
 // 添加/修改商品
 export const reqAddOrUpdateProduct = (product) => ajax('/manage/product/' + ( product._id?'update':'add'), product, 'POST')
+
+//获取角色列表
+export const reqRoles = () => ajax('/manage/role/list', {}, 'GET')
+
+//添加角色
+export const reqAddRole = (roleName) => ajax('/manage/role/add', {roleName}, 'POST')
+
+//更新角色
+export const reqUpdateRole = (role) => ajax('/manage/role/update', role, 'POST')
