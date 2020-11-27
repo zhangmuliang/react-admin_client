@@ -120,8 +120,6 @@ export default class ProductAddUpdate extends Component {
         } else {
             targetOption.isLeaf = true
         }
-
-        // load options lazily
         
         this.setState({
             optionLists: [...this.state.optionLists]

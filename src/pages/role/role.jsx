@@ -108,7 +108,7 @@ export default class Role extends Component {
                 memoryUtils.user = {}
                 storageUtils.removeUser()
                 this.props.history.replace('/login')
-                message.success('当前用户角色权限成功')
+                message.success('当前用户角色权限已修改，请重登')
             } else {
                 message.success('设置角色权限成功')
                 this.setState({
@@ -140,7 +140,11 @@ export default class Role extends Component {
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: [role._id],
-
+                        onSelect:(role)=>{
+                            this.setState({
+                                role
+                            })
+                        }
                     }}
                     rowKey='_id'
                     bordered
