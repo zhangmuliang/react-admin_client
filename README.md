@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# React后台管理项目  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+跟随尚硅谷谷粒后台项目教学视频学习中。
+  
+## 踩坑记录  
 
-## Available Scripts
+### 09节=>引入antd  
 
-In the project directory, you can run:
+自定义antd主题时，由于less-loader版本不一致，需要在config-overrides.js中addLessLoader配置下添加lessOptions这一级配置。  
 
-### `npm start`
+### 13节=>收集表单数据
+  
+form.creat方法在antd V4已经弃用。无需进行此操作。  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 16节=>表单自定义验证
+  
+validator自定义校验需要返回一个promise。
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 32节=>动态显示菜单列表
 
-### `npm test`
+Icon已在antdv4中弃用，三种解决方式：  
+1.import { Icon } from '@ant-design/compatible';兼容旧版本。  
+2.修改图标名为新版，用React.createElement来返回图标。  
+3.可以在配置文件中直接引入对应的新版标签，直接传出。
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 38节=>jsonp请求获取天气
+  
+用高德天气查询来代替教程中的百度天气API
 
-### `npm run build`
+### 49节=>异步显示二级分类列表
+  
+在axios过程中封装ajax，参数params写成param，导致出现无法正确获取接口数据bug。
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 53节=>更新分类  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+由于antdV4中不含有creat方法，且在类组件中应该使用formRef = React.createRef()来传递表单数据。  
+在函数组件中则应使用useForm。  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 55节=>添加分类
+  
+与上一个部分相同，应该使用ref来收集表单数据。  
+另一方面注意分类名的初始值由Form.Item的initialValue来控制。  
+同样需要注意其后续值的改变由FormInstance的setFieldsValue来实现控制。  
 
-### `npm run eject`
+### 57节=>表单验证
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+FormInstance的validateFields是由promise实现而非callback调用。  
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
