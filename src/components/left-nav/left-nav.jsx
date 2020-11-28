@@ -7,6 +7,9 @@ import menuList from "../../config/menuConfig";
 import getIconutil from "../../utils/getIconUtils";
 import './left-nav.less';
 import memoryUtils from "../../utils/memoryUtils";
+import { connect } from "react-redux";
+import { setHeadTitle } from "../../redux/actions";
+import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 const { SubMenu } = Menu;
 
@@ -34,9 +37,12 @@ class LeftNav extends Component {
             const icon = getIconutil.getIcon(item.icon)
             if (this.hasAuth(item)) {
                 if (!item.children) {
+                    if(path.indexOf(item.key)===0){
+                        this.props.setHeadTitle(item.title)
+                    }
                     return (
                         <Menu.Item key={item.key} icon={icon}>
-                            <Link to={item.key}>
+                            <Link to={item.key} onClick={() => this.props.setHeadTitle(item.title)}>
                                 <span>{item.title}</span>
                             </Link>
                         </Menu.Item>
@@ -125,4 +131,7 @@ class LeftNav extends Component {
     }
 }
 
-export default withRouter(LeftNav)
+export default connect(
+    state => ({}),
+    {setHeadTitle}
+)(withRouter(LeftNav))

@@ -11,6 +11,7 @@ import { reqWeather } from "../../api";
 import menuList from "../../config/menuConfig";
 import storageUtils from "../../utils/storageUtils";
 import LinkButton from "../link-button/link-button";
+import { connect } from "react-redux";
 
 class HeaderNav extends Component{
     state={
@@ -78,7 +79,8 @@ class HeaderNav extends Component{
     render () {
         const {currentTime,temperature,weather} = this.state
         const username = memoryUtils.user.username
-        const title = this.getTitle()
+        const title = this.props.headTitle
+        // const title = this.getTitle()
         return (
             <div className="header-nav">
                 <div className="header-nav-top">
@@ -98,4 +100,7 @@ class HeaderNav extends Component{
     }
 }
 
-export default withRouter(HeaderNav)
+export default connect(
+    state => ({headTitle: state.headTitle}),
+    {}
+)(withRouter(HeaderNav))
