@@ -13,7 +13,8 @@ import User from "../user/user";
 import Bar from "../charts/bar";
 import Line from "../charts/line";
 import Pie from "../charts/pie";
-import {connect} from "react-redux"
+import NotFound from "../not-found/not-found"
+import { connect } from "react-redux"
 
 const { Footer, Sider, Content } = Layout;
 
@@ -27,14 +28,15 @@ class Admin extends Component {
             return <Redirect to='/Login' />
         }
         return (
-            <Layout style={{ minHeight: "100%"}}>
+            <Layout style={{ minHeight: "100%" }}>
                 <Sider>
                     <LeftNav />
                 </Sider>
                 <Layout>
                     <HeaderNav />
-                    <Content style={{margin: 20, backgroundColor: "#fff"}}>
+                    <Content style={{ margin: 20, backgroundColor: "#fff" }}>
                         <Switch>
+                            <Redirect exact={true} from='/' to='/home' />
                             <Route path='/home' component={Home} />
                             <Route path='/category' component={Category} />
                             <Route path='/product' component={Product} />
@@ -43,10 +45,11 @@ class Admin extends Component {
                             <Route path='/charts/bar' component={Bar} />
                             <Route path='/charts/line' component={Line} />
                             <Route path='/charts/pie' component={Pie} />
-                            <Redirect to='/home' />
+                            <Route component={NotFound} />
+
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: "center", borderTop:"1px solid gray", color: "#777" }}>推荐使用火狐浏览器，可以获得最佳页面体验效果</Footer>
+                    <Footer style={{ textAlign: "center", borderTop: "1px solid gray", color: "#777" }}>推荐使用火狐浏览器，可以获得最佳页面体验效果</Footer>
                 </Layout>
             </Layout>
         )
@@ -54,6 +57,6 @@ class Admin extends Component {
 }
 
 export default connect(
-    state => ({user: state.user}),
+    state => ({ user: state.user }),
     {}
 )(Admin)
