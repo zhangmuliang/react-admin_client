@@ -6,10 +6,10 @@ import logo from "../../assets/images/logo.png";
 import menuList from "../../config/menuConfig";
 import getIconutil from "../../utils/getIconUtils";
 import './left-nav.less';
-import memoryUtils from "../../utils/memoryUtils";
+
 import { connect } from "react-redux";
 import { setHeadTitle } from "../../redux/actions";
-import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+
 
 const { SubMenu } = Menu;
 
@@ -18,8 +18,8 @@ class LeftNav extends Component {
     hasAuth = (item) => {
         const { key, isPublic } = item
 
-        const menus = memoryUtils.user.role.menus
-        const username = memoryUtils.user.username
+        const menus = this.props.user.role.menus
+        const username = this.props.user.username
         if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
             return true
         } else if (item.children) { // 4. 如果当前用户有此item的某个子item的权限
@@ -132,6 +132,6 @@ class LeftNav extends Component {
 }
 
 export default connect(
-    state => ({}),
+    state => ({user:state.user}),
     {setHeadTitle}
 )(withRouter(LeftNav))

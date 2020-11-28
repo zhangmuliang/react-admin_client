@@ -5,13 +5,12 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import './header-nav.less';
 import {formateDate} from "../../utils/dateUtils"
-import memoryUtils from "../../utils/memoryUtils";
 import { reqWeather } from "../../api";
 
 import menuList from "../../config/menuConfig";
-import storageUtils from "../../utils/storageUtils";
 import LinkButton from "../link-button/link-button";
 import { connect } from "react-redux";
+import {logout} from "../../redux/actions"
 
 class HeaderNav extends Component{
     state={
@@ -57,8 +56,7 @@ class HeaderNav extends Component{
             cancelText: "取消",
             // content: 'Some descriptions',
             onOk: ()=> {
-                storageUtils.removeUser()
-                memoryUtils.user = {}
+                this.props.logout()
                 this.props.history.replace('/Login')
             },
             onCancel() {
@@ -78,7 +76,7 @@ class HeaderNav extends Component{
 
     render () {
         const {currentTime,temperature,weather} = this.state
-        const username = memoryUtils.user.username
+        const username = this.props.user.username
         const title = this.props.headTitle
         // const title = this.getTitle()
         return (
@@ -101,6 +99,6 @@ class HeaderNav extends Component{
 }
 
 export default connect(
-    state => ({headTitle: state.headTitle}),
-    {}
+    state => ({headTitle: state.headTitle, user:state.user}),
+    {logout}
 )(withRouter(HeaderNav))

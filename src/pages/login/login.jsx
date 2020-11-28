@@ -1,35 +1,23 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import './login.less';
 import logo from '../../assets/images/logo.png';
-import { reqLogin } from "../../api";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
+import { connect } from 'react-redux'
+import { loginAction } from '../../redux/actions'
+
+
 
 
 // 登陆的路由组件
-export default class Login extends Component {
+class Login extends Component {
     onFinish = (async (values) => {
         // console.log("提交表单且数据验证成功"+values);
         const { username, password } = values
 
-        const result = await reqLogin(username, password)
-        // console.log('请求发送成功', response.data)
-        // const result = response.data
-        if (result.status === 0) {
-            const user = result.data
-            memoryUtils.user = user
-            storageUtils.saveUser(user)
-
-            message.success('登录成功')
-
-            this.props.history.replace('/home')
-        } else {
-            message.error(result.msg)
-        }
+        this.props.loginAction(username, password)
 
         // reqLogin(username, password).then(response => {
         //     console.log('请求发送成功',response.data)
@@ -58,10 +46,10 @@ export default class Login extends Component {
     }
 
     render() {
-        const user = memoryUtils.user
+        const user = this.props.user
         if (user && user._id) {
             // 自动跳转登录界面
-            return <Redirect to='/' />
+            return <Redirect to='/home' />
         }
         return (
             <div className="login">
@@ -70,6 +58,7 @@ export default class Login extends Component {
                     <h1>React后台管理项目</h1>
                 </header>
                 <section className="login-content">
+                    <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
                     <h2>用户登录</h2>
                     <Form onFinish={this.onFinish} onFinishFailed={this.onFinishFailed} className="login-form">
                         <Form.Item name="username" initialValue='admin'
@@ -117,3 +106,8 @@ export default class Login extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({ user: state.user }),
+    { loginAction }
+)(Login)

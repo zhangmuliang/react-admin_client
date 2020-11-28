@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
 import { Layout } from 'antd';
 
-import memoryUtils from "../../utils/memoryUtils";
+
 import LeftNav from "../../components/left-nav/left-nav";
 import HeaderNav from "../../components/header-nav/header-nav";
 import Home from "../home/home";
@@ -13,14 +13,15 @@ import User from "../user/user";
 import Bar from "../charts/bar";
 import Line from "../charts/line";
 import Pie from "../charts/pie";
+import {connect} from "react-redux"
 
 const { Footer, Sider, Content } = Layout;
 
 // 后台管理的路由组件
-export default class Admin extends Component {
+class Admin extends Component {
 
     render() {
-        const user = memoryUtils.user
+        const user = this.props.user
         if (!user || !user._id) {
             // 自动跳转登录界面
             return <Redirect to='/Login' />
@@ -51,3 +52,8 @@ export default class Admin extends Component {
         )
     }
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {}
+)(Admin)
